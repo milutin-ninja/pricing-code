@@ -8,6 +8,8 @@
   }
 
   (async function redirectByExperiment() {
+    console.log("Running A/B test redirection script");
+    
     if (localStorage.getItem("ab_test_page_assigned")) {
       showPage();
       return;
