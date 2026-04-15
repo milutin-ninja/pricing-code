@@ -16,7 +16,6 @@
         }
       }, 50);
 
-      // Timeout nakon 10 sekundi da ne čeka zauvijek
       setTimeout(() => {
         clearInterval(checkInterval);
         resolve(null);
@@ -27,7 +26,6 @@
   (async function redirectByExperiment() {
     console.log("Running A/B test redirection script");
     
-    // Čekaj da se postavi ajs_anonymous_id
     const anonymousId = await waitForAnonymousId();
     console.log("Anonymous ID:", anonymousId);
 
