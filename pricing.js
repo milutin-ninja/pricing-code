@@ -9,12 +9,15 @@
 
   (async function redirectByExperiment() {
     console.log("Running A/B test redirection script");
-    
-    if (localStorage.getItem("ab_test_page_assigned")) {
+
+    const cachedVariant = localStorage.getItem("ab_test_variant");
+    if (cachedVariant) {
+      console.log("Variant (cached):", cachedVariant);
       showPage();
+      // const path = cachedVariant === "Treatment" ? "/lp/dev-plans" : "/lp/dev-pricing";
+      // window.location.href = `${window.location.origin}${path}`;
       return;
     }
-    localStorage.setItem("ab_test_page_assigned", "true");
 
     const { hostname } = window.location;
     const isStaging =
@@ -28,6 +31,8 @@
       { credentials: "include" }
     );
     const { variant } = await response.json();
+
+    localStorage.setItem("ab_test_variant", variant);
 
     /*
     if (variant !== "Exclude" && typeof analytics !== "undefined") {
