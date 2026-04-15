@@ -1,9 +1,12 @@
-// Dodaj style tag dinamički kroz JS
 const style = document.createElement("style");
 style.id = "ab-test-hide";
 style.textContent = "body { visibility: hidden; }";
 document.head.appendChild(style);
 
+/**
+ * Redirects users to the correct pricing page based on the "feat_grow_plan_enabled" experiment.
+ * "Treatment" → /plans, "Control" or "Exclude" → /pricing.
+ */
 function showPage() {
   const style = document.getElementById("ab-test-hide");
   if (style) style.remove();
@@ -29,5 +32,17 @@ function showPage() {
   );
   const { variant } = await response.json();
 
+  /*
+  if (variant !== "Exclude" && typeof analytics !== "undefined") {
+    analytics.track("_eppoExperimentAssignment", {
+      experiment: "featGrowPlanEnabled",
+      variation: variant,
+    });
+  }
+  */
+
   console.log("Variant:", variant);
+  showPage();
+  // const path = variant === "Treatment" ? "/lp/dev-plans" : "/lp/dev-pricing";
+  // window.location.href = `${window.location.origin}${path}`;
 })();
