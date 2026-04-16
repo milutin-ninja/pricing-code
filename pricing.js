@@ -10,12 +10,14 @@
   function waitForAnonymousId() {
     return new Promise((resolve) => {
       const checkInterval = setInterval(() => {
-        if (typeof window.analytics !== "undefined" && window.analytics.user && window.analytics.user().id()) {
+        const anonymousId = localStorage.getItem("ajs_anonymous_id");
+        if (anonymousId) {
           clearInterval(checkInterval);
-          resolve(window.analytics.user().id());
+          resolve(anonymousId);
         }
       }, 50);
 
+      // Timeout nakon 10 sekundi da ne čeka zauvijek
       setTimeout(() => {
         clearInterval(checkInterval);
         resolve(null);
@@ -26,6 +28,7 @@
   (async function redirectByExperiment() {
     console.log("Running A/B test redirection script");
     
+    // Čekaj da se postavi ajs_anonymous_id
     const anonymousId = await waitForAnonymousId();
     console.log("Anonymous ID:", anonymousId);
 
